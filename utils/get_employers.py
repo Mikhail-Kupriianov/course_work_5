@@ -14,9 +14,3 @@ def get_employers() -> list:
         temp_list = [key, value]
         result.append(tuple(temp_list))
     return result
-
-
-if __name__ == "__main__":
-    # DATA_PATH = os.path.abspath("../data")
-
-    print(get_employers())

@@ -7,19 +7,23 @@ from utils.get_vacancies import get_vac_list
 
 PASS = os.environ.get('PG_PASS')
 
-employers = get_employers()
-employers_id = [item[0] for item in employers]
 
-vacancies = get_vac_list(employers_id)
+def insert_data() -> bool:
+    result = False
+    employers = get_employers()
+    employers_id = [item[0] for item in employers]
 
-conn = psycopg2.connect(host='localhost', database='cw_5', user='postgres', password=PASS)
-try:
-    with conn:
-        with conn.cursor() as cur:
-            cur.executemany("INSERT INTO employers VALUES (%s, %s)", employers)
-        with conn.cursor() as cur:
-            cur.executemany("INSERT INTO vacancies VALUES (%s, %s, %s, %s, %s, %s)", vacancies)
+    vacancies = get_vac_list(employers_id)
 
-finally:
-    conn.close()
-print(employers)
+    conn = psycopg2.connect(host='localhost', database='cw_5', user='postgres', password=PASS)
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.executemany("INSERT INTO employers VALUES (%s, %s)", employers)
+            with conn.cursor() as cur:
+                cur.executemany("INSERT INTO vacancies VALUES (%s, %s, %s, %s, %s, %s)", vacancies)
+        result = True
+
+    finally:
+        conn.close()
+    return result
